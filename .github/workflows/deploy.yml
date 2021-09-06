@@ -1,0 +1,52 @@
+name: Deploy New Version
+
+on:
+  workflow_dispatch:
+    inputs: 
+      Version:
+        description: "The docker image tag to deploy. Defaults to latest"
+        required: true
+        default: 'latest'
+      Environment:
+        description: "The environment to deploy. Can be either: 'qa', 'prod', or 'all'."
+        required: true
+        default: 'qa'
+      Region:
+        description: "The AWS region to target. Can be either: 'us-west-1', 'ca-central-1', or 'all'."
+        required: true
+        default: 'us-west-1'
+
+env:
+  APP: 'h-periodic'
+  TYPE: 'deploy'
+  ENV: ${{ github.event.inputs.Environment }}
+  REGION: ${{ github.event.inputs.Region }}
+  APP_DOCKER_VERSION: ${{ github.event.inputs.Version }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - name: Docker login
+        run: docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
+      - name: Docker pull
+        run: docker pull ghcr.io/hypothesis/dummy-deploy:latest
+      - name: Docker run
+        run: |
+          docker run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+            -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+            -e AWS_DEFAULT_REGION=$REGION \
+            -e APP=$APP \
+            -e TYPE=$TYPE \
+            -e ENV=$ENV \
+            -e REGION=$REGION \
+            -e APP_DOCKER_VERSION=$APP_DOCKER_VERSION \
+            --rm \
+            ghcr.io/hypothesis/dummy-deploy:latest \
+            /bin/sh /deploy/bin/jenkins
