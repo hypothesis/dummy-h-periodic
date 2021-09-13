@@ -5,6 +5,7 @@ on:
 
 jobs:
   build-and-release:
+    name: Build and Release
     runs-on: ubuntu-latest
     steps:
     - name: Dummy build
@@ -13,25 +14,28 @@ jobs:
       run: echo "release"
 
   deploy-qa:
-    if: github.ref == 'refs/heads/master'
+    name: Deploy QA
     needs: build-and-release
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     steps:
     - name: Dummy step
       run: echo "Master branch: Deploy QA"
 
   approval:
-    if: github.ref == 'refs/heads/master'
+    name: Approval
     needs: deploy-qa
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     steps:
     - name: Dummy step
       run: echo "Mater branch: Approval"
 
   deploy-prod:
-    if: github.ref == 'refs/heads/master'
+    name: Deploy Production
     needs: approval
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     steps:
     - name: Dummy step
       run: echo "Master branch: Deploy prod"
