@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
-    - name: Dummy Approval
+    - name: Dummy Approval Stage
       run: echo "Master branch - Approval"
 
   deploy-prod:
