@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
-    - name: Dummy step
+    - name: Dummy Deploy QA
       run: echo "Master branch - Deploy QA"
 
   approval:
@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
-    - name: Dummy step
+    - name: Dummy Approval
       run: echo "Master branch - Approval"
 
   deploy-prod:
@@ -40,5 +40,5 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
-    - name: Dummy step
+    - name: Dummy Deploy Prod
       run: echo "Master branch - Deploy prod"
