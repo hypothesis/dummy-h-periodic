@@ -11,7 +11,7 @@ jobs:
       run: echo "Build and Release"
 
   deploy-qa:
-    needs: build
+    needs: build-and-release
     runs-on: ubuntu-latest
     steps:
     - name: Dummy step
