@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Dummy step
+      run: echo "Build"
+
+  deploy qa:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Dummy step
+      run: echo "Deploy QA"
+
+  approval:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Dummy step
+      run: echo "Approval"
+
+  deploy prod:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Dummy step
+      run: echo "Deploy prod"
