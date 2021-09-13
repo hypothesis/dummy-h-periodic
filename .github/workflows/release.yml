@@ -4,11 +4,11 @@ on:
   push:
 
 jobs:
-  build:
+  build-and-release:
     runs-on: ubuntu-latest
     steps:
     - name: Dummy step
-      run: echo "Build"
+      run: echo "Build and Release"
 
   deploy-qa:
     needs: build
@@ -18,14 +18,14 @@ jobs:
       run: echo "Deploy QA"
 
   approval:
-    needs: build
+    needs: deploy-qa
     runs-on: ubuntu-latest
     steps:
     - name: Dummy step
       run: echo "Approval"
 
   deploy-prod:
-    needs: build
+    needs: approval
     runs-on: ubuntu-latest
     steps:
     - name: Dummy step
