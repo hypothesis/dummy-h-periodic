@@ -10,7 +10,7 @@ jobs:
     - name: Dummy step
       run: echo "Build"
 
-  deploy qa:
+  deploy-qa:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -24,7 +24,7 @@ jobs:
     - name: Dummy step
       run: echo "Approval"
 
-  deploy prod:
+  deploy-prod:
     needs: build
     runs-on: ubuntu-latest
     steps:
