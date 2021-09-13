@@ -8,10 +8,13 @@ jobs:
     name: Build and Release
     runs-on: ubuntu-latest
     steps:
-    - name: Dummy build
-      run: echo "Build"
-    - name: Dummy release
-      run: echo "release"
+    - uses: actions/checkout@v2
+    - name: Dummy Build
+      run: echo "All branches - Build and Release"
+    - name: Dummy Release
+      run: |
+        BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+        if [ $BRANCH_NAME = 'master' ] ; then echo "Master branch - Release" ; fi
 
   deploy-qa:
     name: Deploy QA
@@ -20,7 +23,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     steps:
     - name: Dummy step
-      run: echo "Master branch: Deploy QA"
+      run: echo "Master branch - Deploy QA"
 
   approval:
     name: Approval
@@ -29,13 +32,13 @@ jobs:
     if: github.ref == 'refs/heads/master'
     steps:
     - name: Dummy step
-      run: echo "Mater branch: Approval"
+      run: echo "Master branch - Approval"
 
   deploy-prod:
-    name: Deploy Production
+    name: Deploy Prod
     needs: approval
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
     - name: Dummy step
-      run: echo "Master branch: Deploy prod"
+      run: echo "Master branch - Deploy prod"
