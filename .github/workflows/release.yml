@@ -11,7 +11,7 @@ jobs:
       name: dummy-h-periodic
     steps:
     - uses: actions/checkout@v2
-    - name: Dummy Build
+    - name: Build
       run: |
         echo "All branches - Build"
         GIT_SHORT=$(git rev-parse --short HEAD)
@@ -21,7 +21,10 @@ jobs:
         TAG=${VERSION//+/-}
         git archive HEAD | docker build -t ${name}:${TAG} -
         docker image ls
-    - name: Dummy Release
+    - name: Test
+      run: |
+        docker image ls
+    - name: Release
       run: |
         BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
         if [ $BRANCH_NAME = 'master' ] ; then echo "Master branch - Release" ; fi
