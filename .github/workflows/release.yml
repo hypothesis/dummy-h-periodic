@@ -40,7 +40,7 @@ jobs:
 
   deploy-prod:
     name: Deploy Prod
-    needs: approval
+    needs: deploy-qa
     runs-on: ubuntu-latest
     environment: Approval
     if: github.ref == 'refs/heads/master'
