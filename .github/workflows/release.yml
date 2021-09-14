@@ -38,20 +38,11 @@ jobs:
     - name: Dummy Deploy QA
       run: echo "Master branch - Deploy QA"
 
-  approval:
-    name: Approval
-    needs: deploy-qa
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
-    environment: Approval
-    steps:
-    - name: Dummy Approval Stage
-      run: echo "Master branch - Approval"
-
   deploy-prod:
     name: Deploy Prod
     needs: approval
     runs-on: ubuntu-latest
+    environment: Approval
     if: github.ref == 'refs/heads/master'
     steps:
     - name: Dummy Deploy Prod
