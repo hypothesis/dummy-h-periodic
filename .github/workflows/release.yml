@@ -31,14 +31,11 @@ jobs:
     - name: Release
       if: github.ref == 'refs/heads/master'
       run: |
-        BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
-        if [ $BRANCH_NAME = 'master' ] ; then
-          echo "Master branch - Release"
-          echo "${{ secrets.DOCKER_KEY }}" | docker login -u indigobravo  --password-stdin
-          docker push "hypothesis/${name}:${TAG}"
-          docker tag "hypothesis/${name}:${TAG}" "hypothesis/${name}:latest"
-          docker push "hypothesis/${name}:latest"
-        fi
+        echo "Master branch - Release"
+        echo "${{ secrets.DOCKER_KEY }}" | docker login -u indigobravo  --password-stdin
+        docker push "hypothesis/${name}:${TAG}"
+        docker tag "hypothesis/${name}:${TAG}" "hypothesis/${name}:latest"
+        docker push "hypothesis/${name}:latest"
 
   deploy-qa:
     name: Deploy QA
