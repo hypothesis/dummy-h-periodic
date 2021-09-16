@@ -1,5 +1,7 @@
 name: Release
 
+concurrency: dummy-h-periodic-release
+
 on:
   push:
 
