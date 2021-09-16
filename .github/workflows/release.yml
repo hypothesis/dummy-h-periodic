@@ -29,6 +29,7 @@ jobs:
       run: |
         docker image ls
     - name: Release
+      if: github.ref == 'refs/heads/master'
       run: |
         BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
         if [ $BRANCH_NAME = 'master' ] ; then
