@@ -23,7 +23,7 @@ jobs:
         VERSION=$(echo "$GIT_TS_CONVERTED-g$GIT_SHORT")
         export TAG=${VERSION//+/-}
         echo "::set-env name=TAG::$TAG"
-        git archive HEAD | docker build -t ${name}:${TAG} -
+        git archive HEAD | docker build -t "hypothesis/${name}:${TAG}" -
         docker image ls
     - name: Test
       run: |
