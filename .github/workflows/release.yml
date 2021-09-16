@@ -18,7 +18,8 @@ jobs:
         GIT_COMMIT_TIMESTAMP=$(git --no-pager show -s --format=%ct $GIT_SHORT)
         GIT_TS_CONVERTED=$(date -d @$GIT_COMMIT_TIMESTAMP +"%Y%m%d")
         VERSION=$(echo "$GIT_TS_CONVERTED-g$GIT_SHORT")
-        TAG=${VERSION//+/-}
+        export TAG=${VERSION//+/-}
+        echo "::set-env name=TAG::$TAG"
         git archive HEAD | docker build -t ${name}:${TAG} -
         docker image ls
     - name: Test
@@ -27,7 +28,11 @@ jobs:
     - name: Release
       run: |
         BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
-        if [ $BRANCH_NAME = 'master' ] ; then echo "Master branch - Release" ; fi
+        if [ $BRANCH_NAME = 'master' ] ; then
+          echo "Master branch - Release"
+          echo "${{ secrets.DOCKER_KEY }}" | docker login -u indigobravo  --password-stdin
+          docker push ${name}:${TAG}
+        fi
 
   deploy-qa:
     name: Deploy QA
