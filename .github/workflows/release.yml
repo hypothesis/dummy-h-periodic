@@ -3,6 +3,9 @@ name: Release
 on:
   push:
 
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
 jobs:
   build-and-release:
     name: Build and Release
