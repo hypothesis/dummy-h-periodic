@@ -7,6 +7,9 @@ on:
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
 jobs:
   build-test-release:
@@ -42,8 +45,23 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
-    - name: Dummy Deploy QA
-      run: echo "Master branch - Deploy QA"
+    - name: Pull deployment container
+      run: |
+        docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
+        docker pull ghcr.io/hypothesis/dummy-deploy:latest
+    - name: Run QA Deployment
+      run: |
+        docker run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+          -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+          -e AWS_DEFAULT_REGION=us-west-1 \
+          -e APP=dummy-h-periodic \
+          -e TYPE=deploy \
+          -e ENV=qa \
+          -e REGION=us-west-1 \
+          -e APP_DOCKER_VERSION=latest \
+          --rm \
+          ghcr.io/hypothesis/dummy-deploy:latest \
+          /bin/sh /deploy/bin/jenkins
 
   deploy-prod:
     name: Deploy Prod
