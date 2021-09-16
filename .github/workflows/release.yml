@@ -35,6 +35,7 @@ jobs:
           echo "Master branch - Release"
           echo "${{ secrets.DOCKER_KEY }}" | docker login -u indigobravo  --password-stdin
           docker push "hypothesis/${name}:${TAG}"
+          docker tag "hypothesis/${name}:${TAG}" "hypothesis/${name}:latest"
           docker push "hypothesis/${name}:latest"
         fi
 
