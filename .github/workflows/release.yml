@@ -36,7 +36,7 @@ jobs:
 
   deploy-qa:
     name: Deploy QA
-    needs: build-and-release
+    needs: build-test-release
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
