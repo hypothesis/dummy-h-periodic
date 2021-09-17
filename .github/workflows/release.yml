@@ -59,8 +59,6 @@ jobs:
           --rm \
           ghcr.io/hypothesis/dummy-deploy:latest \
           /bin/sh /deploy/bin/jenkins
-    - name: Record deploy in NewRelic 
-      run: echo "NewRelic deployment notification"
 
   deploy-prod-us-west-1:
     name: Prod - US-West-1
@@ -69,12 +67,9 @@ jobs:
     environment: Production
     if: github.ref == 'refs/heads/master'
     steps:
-    - name: Pull deployment container
-      run: |
-        docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
-        docker pull ghcr.io/hypothesis/dummy-deploy:latest
     - name: Run US-West-1 Production Deployment
       run: |
+        docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
         docker run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
           -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
           -e AWS_DEFAULT_REGION=us-west-1 \
@@ -86,8 +81,6 @@ jobs:
           --rm \
           ghcr.io/hypothesis/dummy-deploy:latest \
           /bin/sh /deploy/bin/jenkins
-    - name: Record deploy in NewRelic 
-      run: echo "NewRelic deployment notification"
 
   deploy-prod-ca-central-1:
     name: Prod - CA-Central-1
@@ -96,12 +89,9 @@ jobs:
     environment: Production
     if: github.ref == 'refs/heads/master'
     steps:
-    - name: Pull deployment container
-      run: |
-        docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
-        docker pull ghcr.io/hypothesis/dummy-deploy:latest
     - name: Run CA-Central-1 Production Deployment
       run: |
+        docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
         docker run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
           -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
           -e AWS_DEFAULT_REGION=ca-central-1 \
@@ -113,5 +103,3 @@ jobs:
           --rm \
           ghcr.io/hypothesis/dummy-deploy:latest \
           /bin/sh /deploy/bin/jenkins
-    - name: Record deploy in NewRelic 
-      run: echo "NewRelic deployment notification"
