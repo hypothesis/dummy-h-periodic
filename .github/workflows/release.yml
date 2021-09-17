@@ -1,4 +1,4 @@
-name: Release
+name: Automated Release
 
 concurrency: dummy-h-periodic-release
 
@@ -62,6 +62,8 @@ jobs:
           --rm \
           ghcr.io/hypothesis/dummy-deploy:latest \
           /bin/sh /deploy/bin/jenkins
+    - name: Record deploy in NewRelic 
+      run: echo "NewRelic deployment notification"
 
   deploy-prod-us-west-1:
     name: Prod - US-West-1
@@ -87,6 +89,8 @@ jobs:
           --rm \
           ghcr.io/hypothesis/dummy-deploy:latest \
           /bin/sh /deploy/bin/jenkins
+    - name: Record deploy in NewRelic 
+      run: echo "NewRelic deployment notification"
 
   deploy-prod-ca-central-1:
     name: Prod - CA-Central-1
@@ -112,3 +116,5 @@ jobs:
           --rm \
           ghcr.io/hypothesis/dummy-deploy:latest \
           /bin/sh /deploy/bin/jenkins
+    - name: Record deploy in NewRelic 
+      run: echo "NewRelic deployment notification"
