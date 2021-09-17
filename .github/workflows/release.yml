@@ -40,7 +40,7 @@ jobs:
         docker push "hypothesis/${name}:latest"
 
   deploy-qa:
-    name: US-West-1 QA Deploy
+    name: QA - US-West-1
     needs: build-test-release
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
@@ -64,7 +64,7 @@ jobs:
           /bin/sh /deploy/bin/jenkins
 
   deploy-prod-us-west-1:
-    name: US-West-1 Production Deploy
+    name: Prod - US-West-1
     needs: deploy-qa
     runs-on: ubuntu-latest
     environment: Production
@@ -89,7 +89,7 @@ jobs:
           /bin/sh /deploy/bin/jenkins
 
   deploy-prod-ca-central-1:
-    name: CA-Central-1 Production Deploy
+    name: Prod - CA-Central-1
     needs: deploy-qa
     runs-on: ubuntu-latest
     environment: Production
