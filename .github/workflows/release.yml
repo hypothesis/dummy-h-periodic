@@ -12,8 +12,8 @@ env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
 jobs:
-  build-test-release:
-    name: Build, Test & Release
+  build-test-push:
+    name: Build, Test & Push
     runs-on: ubuntu-latest
     env:
       name: dummy-h-periodic
@@ -31,7 +31,7 @@ jobs:
     - name: Test
       run: |
         echo "Add tests here!"
-    - name: Release
+    - name: Push
       if: github.ref == 'refs/heads/master'
       run: |
         echo "${{ secrets.DOCKER_KEY }}" | docker login -u indigobravo  --password-stdin
@@ -41,7 +41,7 @@ jobs:
 
   deploy-qa:
     name: QA - US-West-1
-    needs: build-test-release
+    needs: build-test-push
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
