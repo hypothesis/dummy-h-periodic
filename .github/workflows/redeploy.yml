@@ -1,5 +1,7 @@
 name: Redeploy Current Version
 
+concurrency: dummy-h-periodic-redeploy
+
 on:
   workflow_dispatch:
     inputs: 

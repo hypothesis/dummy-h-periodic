@@ -10,6 +10,10 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  APP: 'dummy-h-periodic'
+  TYPE: 'deploy'
+  US_REGION: 'us-west-1'
+  CA_REGION: 'ca-central-1'
 
 jobs:
   build-test-push:
@@ -50,11 +54,11 @@ jobs:
         docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
         docker run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
           -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
-          -e AWS_DEFAULT_REGION=us-west-1 \
-          -e APP=dummy-h-periodic \
-          -e TYPE=deploy \
+          -e AWS_DEFAULT_REGION=$US_REGION \
+          -e APP=$APP \
+          -e TYPE=$TYPE \
           -e ENV=qa \
-          -e REGION=us-west-1 \
+          -e REGION=$US_REGION \
           -e APP_DOCKER_VERSION=latest \
           --rm \
           ghcr.io/hypothesis/dummy-deploy:latest \
@@ -72,11 +76,11 @@ jobs:
         docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
         docker run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
           -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
-          -e AWS_DEFAULT_REGION=us-west-1 \
+          -e AWS_DEFAULT_REGION=$US_REGION \
           -e APP=dummy-h-periodic \
           -e TYPE=deploy \
           -e ENV=prod \
-          -e REGION=us-west-1 \
+          -e REGION=$US_REGION \
           -e APP_DOCKER_VERSION=latest \
           --rm \
           ghcr.io/hypothesis/dummy-deploy:latest \
@@ -94,11 +98,11 @@ jobs:
         docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
         docker run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
           -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
-          -e AWS_DEFAULT_REGION=ca-central-1 \
+          -e AWS_DEFAULT_REGION=$CA_REGION \
           -e APP=dummy-h-periodic-ca \
           -e TYPE=deploy \
           -e ENV=prod \
-          -e REGION=ca-central-1 \
+          -e REGION=$CA_REGION \
           -e APP_DOCKER_VERSION=latest \
           --rm \
           ghcr.io/hypothesis/dummy-deploy:latest \
