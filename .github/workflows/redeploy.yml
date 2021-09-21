@@ -14,7 +14,7 @@ on:
 
 env:
   IMAGE_NAME: ${{ github.repository }}
-  APP: 'h-periodic'
+  APP: 'dummy-h-periodic'
   TYPE: 'redeploy'
   ENV: ${{ github.event.inputs.Environment }}
   REGION: ${{ github.event.inputs.Region }}
@@ -29,12 +29,9 @@ jobs:
       contents: read
       packages: read
     steps:
-      - name: Docker login
-        run: docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
-      - name: Docker pull
-        run: docker pull ghcr.io/hypothesis/dummy-deploy:latest
-      - name: Docker run
+      - name: Redeploy new version
         run: |
+          docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
           docker run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
             -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
             -e AWS_DEFAULT_REGION=$REGION \
