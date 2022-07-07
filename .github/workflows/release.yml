@@ -5,10 +5,13 @@ concurrency: dummy-h-periodic-release
 on:
   push:
 
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_SESSION_TOKEN: $ACTIONS_ID_TOKEN_REQUEST_TOKEN
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   APP: 'dummy-h-periodic'
   TYPE: 'deploy'
@@ -49,20 +52,23 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: arn:aws:iam::964867326460:role/Deployments
+        role-duration-seconds: 900
+        aws-region: us-west-1
+    - name: Checkout deployment repo
+      uses: actions/checkout@v3
+      with:
+        repository: hypothesis/dummy-deploy
+        ssh-key: ${{ secrets.DEPLOYMENT_KEY }}
+    - name: install boto3
+      run: pip install boto3
     - name: Run QA Deployment
       run: |
-        docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
-        docker run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
-          -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
-          -e AWS_DEFAULT_REGION=$US_REGION \
-          -e APP=$APP \
-          -e TYPE=$TYPE \
-          -e ENV=qa \
-          -e REGION=$US_REGION \
-          -e APP_DOCKER_VERSION=latest \
-          --rm \
-          ghcr.io/hypothesis/dummy-deploy:latest \
-          /bin/sh /deploy/bin/jenkins
+        export APP="dummy-h-periodic" TYPE="deploy" ENV="qa" REGION="us-west-1" APP_DOCKER_VERSION="latest"
+        ./bin/jenkins
 
   deploy-prod-us-west-1:
     name: Prod - US-West-1
@@ -71,20 +77,23 @@ jobs:
     environment: Production
     if: github.ref == 'refs/heads/main'
     steps:
-    - name: Run US-West-1 Production Deployment
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: arn:aws:iam::964867326460:role/Deployments
+        role-duration-seconds: 900
+        aws-region: us-west-1
+    - name: Checkout deployment repo
+      uses: actions/checkout@v3
+      with:
+        repository: hypothesis/dummy-deploy
+        ssh-key: ${{ secrets.DEPLOYMENT_KEY }}
+    - name: install boto3
+      run: pip install boto3
+    - name: Run production deployment (us-west-1)
       run: |
-        docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
-        docker run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
-          -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
-          -e AWS_DEFAULT_REGION=$US_REGION \
-          -e APP=dummy-h-periodic \
-          -e TYPE=deploy \
-          -e ENV=prod \
-          -e REGION=$US_REGION \
-          -e APP_DOCKER_VERSION=latest \
-          --rm \
-          ghcr.io/hypothesis/dummy-deploy:latest \
-          /bin/sh /deploy/bin/jenkins
+        export APP="dummy-h-periodic" TYPE="deploy" ENV="prod" REGION="us-west-1" APP_DOCKER_VERSION="latest"
+        ./bin/jenkins
 
   deploy-prod-ca-central-1:
     name: Prod - CA-Central-1
@@ -93,17 +102,20 @@ jobs:
     environment: Production
     if: github.ref == 'refs/heads/main'
     steps:
-    - name: Run CA-Central-1 Production Deployment
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: arn:aws:iam::964867326460:role/Deployments
+        role-duration-seconds: 900
+        aws-region: us-west-1
+    - name: Checkout deployment repo
+      uses: actions/checkout@v3
+      with:
+        repository: hypothesis/dummy-deploy
+        ssh-key: ${{ secrets.DEPLOYMENT_KEY }}
+    - name: install boto3
+      run: pip install boto3
+    - name: Run production deployment (ca-central-1)
       run: |
-        docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
-        docker run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
-          -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
-          -e AWS_DEFAULT_REGION=$CA_REGION \
-          -e APP=dummy-h-periodic-ca \
-          -e TYPE=deploy \
-          -e ENV=prod \
-          -e REGION=$CA_REGION \
-          -e APP_DOCKER_VERSION=latest \
-          --rm \
-          ghcr.io/hypothesis/dummy-deploy:latest \
-          /bin/sh /deploy/bin/jenkins
+        export APP="dummy-h-periodic-ca" TYPE="deploy" ENV="prod" REGION="ca-central-1" APP_DOCKER_VERSION="latest"
+        ./bin/jenkins
