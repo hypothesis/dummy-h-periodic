@@ -36,7 +36,7 @@ jobs:
       run: |
         echo "Add tests here!"
     - name: Push
-      if: github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/main'
       run: |
         echo "${{ secrets.DOCKER_KEY }}" | docker login -u indigobravo  --password-stdin
         docker push "hypothesis/${name}:${TAG}"
@@ -47,7 +47,7 @@ jobs:
     name: QA - US-West-1
     needs: build-test-push
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     steps:
     - name: Run QA Deployment
       run: |
@@ -69,7 +69,7 @@ jobs:
     needs: deploy-qa
     runs-on: ubuntu-latest
     environment: Production
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     steps:
     - name: Run US-West-1 Production Deployment
       run: |
@@ -91,7 +91,7 @@ jobs:
     needs: deploy-qa
     runs-on: ubuntu-latest
     environment: Production
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     steps:
     - name: Run CA-Central-1 Production Deployment
       run: |
