@@ -6,17 +6,13 @@ on:
   push:
 
 permissions:
-  id-token: write # required to use OIDC authentication
-  contents: read # required to checkout the code from the repo
+  id-token: write # required to use AWS OIDC auth
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-  AWS_SESSION_TOKEN: $ACTIONS_ID_TOKEN_REQUEST_TOKEN
-  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   APP: 'dummy-h-periodic'
   TYPE: 'deploy'
-  US_REGION: 'us-west-1'
-  CA_REGION: 'ca-central-1'
+  APP_DOCKER_VERSION: "latest"
 
 jobs:
   build-test-push:
@@ -50,6 +46,9 @@ jobs:
     name: QA - US-West-1
     needs: build-test-push
     runs-on: ubuntu-latest
+    env:
+      ENV: "qa"
+      REGION: "us-west-1"
     if: github.ref == 'refs/heads/main'
     steps:
     - name: configure aws credentials
@@ -67,13 +66,16 @@ jobs:
       run: pip install boto3
     - name: Run QA Deployment
       run: |
-        export APP="dummy-h-periodic" TYPE="deploy" ENV="qa" REGION="us-west-1" APP_DOCKER_VERSION="latest"
+        echo $REGION
         ./bin/jenkins
 
   deploy-prod-us-west-1:
     name: Prod - US-West-1
     needs: deploy-qa
     runs-on: ubuntu-latest
+    env:
+      ENV: "prod"
+      REGION: "us-west-1"
     environment: Production
     if: github.ref == 'refs/heads/main'
     steps:
@@ -92,13 +94,16 @@ jobs:
       run: pip install boto3
     - name: Run production deployment (us-west-1)
       run: |
-        export APP="dummy-h-periodic" TYPE="deploy" ENV="prod" REGION="us-west-1" APP_DOCKER_VERSION="latest"
         ./bin/jenkins
 
   deploy-prod-ca-central-1:
     name: Prod - CA-Central-1
     needs: deploy-qa
     runs-on: ubuntu-latest
+    env:
+      APP: 'dummy-h-periodic-ca'
+      ENV: "prod"
+      REGION: "ca-central-1"
     environment: Production
     if: github.ref == 'refs/heads/main'
     steps:
@@ -117,5 +122,4 @@ jobs:
       run: pip install boto3
     - name: Run production deployment (ca-central-1)
       run: |
-        export APP="dummy-h-periodic-ca" TYPE="deploy" ENV="prod" REGION="ca-central-1" APP_DOCKER_VERSION="latest"
         ./bin/jenkins
