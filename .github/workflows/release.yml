@@ -11,10 +11,9 @@ permissions:
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-  AWS_SESSION_TOKEN: $ACTIONS_ID_TOKEN_REQUEST_TOKEN
-  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   APP: 'dummy-h-periodic'
   TYPE: 'deploy'
+  APP_DOCKER_VERSION: "latest"
   US_REGION: 'us-west-1'
   CA_REGION: 'ca-central-1'
 
@@ -50,6 +49,9 @@ jobs:
     name: QA - US-West-1
     needs: build-test-push
     runs-on: ubuntu-latest
+    env:
+      ENV: "qa"
+      REGION: "$US_REGION"
     if: github.ref == 'refs/heads/main'
     steps:
     - name: configure aws credentials
@@ -67,7 +69,6 @@ jobs:
       run: pip install boto3
     - name: Run QA Deployment
       run: |
-        export APP="dummy-h-periodic" TYPE="deploy" ENV="qa" REGION="us-west-1" APP_DOCKER_VERSION="latest"
         ./bin/jenkins
 
   deploy-prod-us-west-1:
