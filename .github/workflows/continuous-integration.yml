@@ -20,6 +20,7 @@ jobs:
         id: list-python-versions
         run: |
           pip install hdev
+          find .
           echo "::set-output name=python_headline_version::`hdev python_version --style plain --first`"
   backend:
     name: Backend
