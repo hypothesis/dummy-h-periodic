@@ -14,33 +14,34 @@ on:
         required: true
         default: 'us-west-1'
 
+permissions:
+  id-token: write # required to use AWS OIDC auth
+
 env:
-  IMAGE_NAME: ${{ github.repository }}
   APP: 'dummy-h-periodic'
   TYPE: 'redeploy'
   ENV: ${{ github.event.inputs.Environment }}
   REGION: ${{ github.event.inputs.Region }}
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  APP_DOCKER_VERSION: ${{ github.event.inputs.Version }}
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
 jobs:
   redeploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: read
     steps:
-      - name: Redeploy new version
-        run: |
-          docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
-          docker run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
-            -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
-            -e AWS_DEFAULT_REGION=$REGION \
-            -e APP=$APP \
-            -e TYPE=$TYPE \
-            -e ENV=$ENV \
-            -e REGION=$REGION \
-            --rm \
-            ghcr.io/hypothesis/dummy-deploy:latest \
-            /bin/sh /deploy/bin/jenkins
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: arn:aws:iam::964867326460:role/Deployments
+        role-duration-seconds: 900
+        aws-region: us-west-1
+    - name: Checkout deployment Repo
+      uses: actions/checkout@v3
+      with:
+        repository: hypothesis/dummy-deploy
+        ssh-key: ${{ secrets.DEPLOYMENT_KEY }}
+    - name: install boto3
+      run: pip install boto3
+    - name: Redeploy Current Version
+      run: |
+        ./bin/jenkins
