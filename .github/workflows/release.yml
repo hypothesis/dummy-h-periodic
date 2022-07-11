@@ -32,8 +32,9 @@ jobs:
         echo "::set-env name=TAG::$TAG"
         git archive HEAD | docker build -t "hypothesis/${name}:${TAG}" -
     - name: Test
-      run: |
-        echo "Add tests here!"
+      uses: ./.github/workflows/continuous-integration.yml
+        #run: |
+        #echo "Add tests here!"
     - name: Push
       if: github.ref == 'refs/heads/main'
       run: |
