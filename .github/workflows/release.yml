@@ -54,7 +54,7 @@ jobs:
     - name: configure aws credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        role-to-assume: arn:aws:iam::964867326460:role/Deployments
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/Deployments
         role-duration-seconds: 900
         aws-region: us-west-1
     - name: Checkout deployment repo

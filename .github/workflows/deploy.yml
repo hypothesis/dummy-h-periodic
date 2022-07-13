@@ -46,6 +46,6 @@ jobs:
         ssh-key: ${{ secrets.DEPLOYMENT_KEY }}
     - name: install boto3
       run: pip install boto3
-        #    - name: Deploy new version
-        #      run: |
-        #        ./bin/jenkins
+    - name: Deploy new version
+      run: |
+        ./bin/jenkins
