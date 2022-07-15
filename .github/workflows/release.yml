@@ -16,7 +16,7 @@ env:
 
 jobs:
   continuous-integration:
-    uses: hypothesis/dummy-deploy/.github/workflows/continuous-integration.yml@main
+    uses: ./.github/workflows/continuous-integration.yml
     name: continuous integration
 
   create-docker-image:
