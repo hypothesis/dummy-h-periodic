@@ -17,16 +17,18 @@ env:
 jobs:
   continuous-integration:
     uses: ./.github/workflows/continuous-integration.yml
-    name: Continuous Integration
+    name: continuous integration
 
-  build-test-push:
-    name: Build, Test & Push
+  create-docker-image:
+    name: create docker image
+    needs: continuous-integration
     runs-on: ubuntu-latest
     env:
       name: dummy-h-periodic
+    if: github.ref == 'refs/heads/main'
     steps:
     - uses: actions/checkout@v2
-    - name: Build
+    - name: build
       run: |
         GIT_SHORT=$(git rev-parse --short HEAD)
         GIT_COMMIT_TIMESTAMP=$(git --no-pager show -s --format=%ct $GIT_SHORT)
@@ -35,10 +37,7 @@ jobs:
         export TAG=${VERSION//+/-}
         echo "::set-env name=TAG::$TAG"
         git archive HEAD | docker build -t "hypothesis/${name}:${TAG}" -
-    - name: Test
-      run: |
-        echo "Add tests here!"
-    - name: Push
+    - name: push
       if: github.ref == 'refs/heads/main'
       run: |
         echo "${{ secrets.DOCKER_KEY }}" | docker login -u indigobravo  --password-stdin
@@ -47,8 +46,8 @@ jobs:
         docker push "hypothesis/${name}:latest"
 
   deploy-qa:
-    name: QA - US-West-1
-    needs: build-test-push
+    name: qa - us-west-1
+    needs: create-docker-image
     runs-on: ubuntu-latest
     env:
       ENV: "qa"
@@ -74,7 +73,7 @@ jobs:
         ./bin/jenkins
 
   deploy-prod-us-west-1:
-    name: Prod - US-West-1
+    name: prod - us-west-1
     needs: deploy-qa
     runs-on: ubuntu-latest
     env:
@@ -101,7 +100,7 @@ jobs:
         ./bin/jenkins
 
   deploy-prod-ca-central-1:
-    name: Prod - CA-Central-1
+    name: prod - ca-central-1
     needs: deploy-qa
     runs-on: ubuntu-latest
     env:
