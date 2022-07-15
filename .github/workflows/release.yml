@@ -15,6 +15,10 @@ env:
   APP_DOCKER_VERSION: "latest"
 
 jobs:
+  continuous-integration:
+    uses: ./.github/workflows/continuous-integration.yml
+    name: Continuous Integration
+
   build-test-push:
     name: Build, Test & Push
     runs-on: ubuntu-latest
