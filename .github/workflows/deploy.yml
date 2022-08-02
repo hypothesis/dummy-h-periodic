@@ -10,13 +10,18 @@ on:
         required: true
         default: 'latest'
       Environment:
-        description: "The environment to deploy. Can be either: 'qa', 'prod', or 'all'."
+        description: "The environment to deploy. Can be either: 'qa' or 'prod'."
         required: true
         default: 'qa'
       Region:
+        type: choice
         description: "The AWS region to target. Can be either: 'us-west-1', or 'ca-central-1', or 'all'."
         required: true
         default: 'us-west-1'
+        options:
+          - us-west-1
+          - ca-central-1
+          - all
 
 permissions:
   id-token: write # required to use AWS OIDC auth
