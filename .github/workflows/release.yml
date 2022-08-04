@@ -70,7 +70,7 @@ jobs:
     - name: Run QA Deployment
       run: |
         echo $REGION
-        ./bin/jenkins
+        ./bin/init.sh
 
   deploy-prod-us-west-1:
     name: prod - us-west-1
@@ -97,7 +97,7 @@ jobs:
       run: pip install boto3
     - name: Run production deployment (us-west-1)
       run: |
-        ./bin/jenkins
+        ./bin/init.sh
 
   deploy-prod-ca-central-1:
     name: prod - ca-central-1
@@ -125,4 +125,4 @@ jobs:
       run: pip install boto3
     - name: Run production deployment (ca-central-1)
       run: |
-        ./bin/jenkins
+        ./bin/init.sh
