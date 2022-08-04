@@ -34,7 +34,6 @@ env:
   ENV: ${{ github.event.inputs.Environment }}
   REGION: ${{ github.event.inputs.Region }}
   APP_DOCKER_VERSION: ${{ github.event.inputs.Version }}
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   deploy:
