@@ -1,7 +1,5 @@
 name: Deploy New Version
 
-concurrency: dummy-h-periodic-deploy
-
 on:
   workflow_dispatch:
     inputs: 

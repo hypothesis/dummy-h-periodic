@@ -1,7 +1,5 @@
 name: Synchronize AWS Environment
 
-concurrency: dummy-h-periodic-sync-env
-
 on:
   workflow_dispatch:
     inputs: 
