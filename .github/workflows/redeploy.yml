@@ -39,7 +39,7 @@ jobs:
         repository: hypothesis/dummy-deploy
         ssh-key: ${{ secrets.DEPLOYMENT_KEY }}
     - name: install boto3
-      run: pip install boto3
+      run: pip install boto3 pyaml
     - name: Redeploy Current Version
       run: |
-        ./bin/jenkins
+        ./bin/init.sh
