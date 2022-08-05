@@ -104,7 +104,6 @@ jobs:
     needs: deploy-qa
     runs-on: ubuntu-latest
     env:
-      APP: 'dummy-h-periodic-ca'
       ENV: "prod"
       REGION: "ca-central-1"
     environment: Production
