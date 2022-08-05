@@ -29,7 +29,7 @@ permissions:
   id-token: write # required to use AWS OIDC auth
 
 env:
-  APP: ${{ github.repository }}
+  APP: 'dummy-h-periodic'
   TYPE: 'deploy'
   ENV: ${{ github.event.inputs.Environment }}
   REGION: ${{ github.event.inputs.Region }}
