@@ -1,6 +1,8 @@
 name: Automated Release
 
-concurrency: dummy-h-periodic-release
+concurrency:
+  group: dummy-h-periodic-release
+  cancel-in-progress: true
 
 on:
   push:
