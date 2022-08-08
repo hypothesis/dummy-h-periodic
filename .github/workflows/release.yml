@@ -4,6 +4,8 @@ concurrency: dummy-h-periodic-release
 
 on:
   push:
+    branches:
+      - main
 
 permissions:
   id-token: write # required to use AWS OIDC auth
@@ -18,7 +20,6 @@ jobs:
   continuous-integration:
     uses: ./.github/workflows/continuous-integration.yml
     name: continuous integration
-    if: github.ref == 'refs/heads/main'
 
   create-docker-image:
     name: create docker image
@@ -26,7 +27,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       name: dummy-h-periodic
-    if: github.ref == 'refs/heads/main'
     steps:
     - uses: actions/checkout@v2
     - name: build
@@ -53,7 +53,6 @@ jobs:
     env:
       ENV: "qa"
       REGION: "us-west-1"
-    if: github.ref == 'refs/heads/main'
     steps:
     - name: configure aws credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -81,7 +80,6 @@ jobs:
       ENV: "prod"
       REGION: "us-west-1"
     environment: Production
-    if: github.ref == 'refs/heads/main'
     steps:
     - name: configure aws credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -108,7 +106,6 @@ jobs:
       ENV: "prod"
       REGION: "ca-central-1"
     environment: Production
-    if: github.ref == 'refs/heads/main'
     steps:
     - name: configure aws credentials
       uses: aws-actions/configure-aws-credentials@v1
