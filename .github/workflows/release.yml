@@ -18,6 +18,7 @@ jobs:
   continuous-integration:
     uses: ./.github/workflows/continuous-integration.yml
     name: continuous integration
+    if: github.ref == 'refs/heads/main'
 
   create-docker-image:
     name: create docker image

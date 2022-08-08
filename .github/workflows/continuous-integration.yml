@@ -1,5 +1,6 @@
 name: Continuous integration
 on:
+  push:
   workflow_call:
 
 jobs:
