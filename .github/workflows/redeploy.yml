@@ -1,4 +1,4 @@
-name: Redeploy Current Version
+name: Redeploy
 
 on:
   workflow_dispatch:

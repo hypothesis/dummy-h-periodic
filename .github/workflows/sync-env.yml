@@ -1,4 +1,4 @@
-name: Synchronize AWS Environment
+name: Sync Environment
 
 on:
   workflow_dispatch:
