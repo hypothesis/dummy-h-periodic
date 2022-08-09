@@ -1,5 +1,10 @@
 name: Sync Environment
 
+# Sync Elastic Beanstalk environment definitions with a live service.
+#
+# Environment definitions can be found here:
+# - https://github.com/hypothesis/deployment
+
 on:
   workflow_dispatch:
     inputs: 
@@ -34,18 +39,18 @@ jobs:
   sync-env:
     runs-on: ubuntu-latest
     steps:
-    - name: configure aws credentials
+    - name: Configure aws credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/gha_deploy
+        role-to-assume: ${{ secrets.DEPLOYMENT_AWS_ROLE_ARN }}
         role-duration-seconds: 900
         aws-region: us-west-1
-    - name: Checkout deployment Repo
+    - name: Checkout deployment repo
       uses: actions/checkout@v3
       with:
-        repository: hypothesis/dummy-deploy
-        ssh-key: ${{ secrets.DEPLOYMENT_KEY }}
-    - name: install boto3
+        repository: ${{ secrets.DEPLOYMENT_REPOSITORY }}
+        ssh-key: ${{ secrets.DEPLOYMENT_REPOSITORY_KEY }}
+    - name: Prepare environment
       run: pip install boto3 pyaml
     - name: Synchronize AWS Environment
       run: |
