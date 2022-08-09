@@ -41,9 +41,8 @@ jobs:
         echo "::set-env name=TAG::$TAG"
         git archive HEAD | docker build -t "hypothesis/${name}:${TAG}" -
     - name: push
-      if: github.ref == 'refs/heads/main'
       run: |
-        echo "${{ secrets.DOCKER_KEY }}" | docker login -u indigobravo  --password-stdin
+        echo "${{ secrets.DEPLOYMENT_DOCKER_USER_KEY }}" | docker login -u "${{ secrets.DEPLOYMENT_DOCKER_USER }}"  --password-stdin
         docker push "hypothesis/${name}:${TAG}"
         docker tag "hypothesis/${name}:${TAG}" "hypothesis/${name}:latest"
         docker push "hypothesis/${name}:latest"
