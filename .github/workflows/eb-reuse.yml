@@ -12,11 +12,13 @@ on:
       Application:
         type: string
         description: "The name of the AWS Elastic Beanstalk application to be updated."
+        required: true
       Operation:
         type: string
         description: "The deployment operation. `redeploy` triggers a redeployment of the currently-deployed version. `deploy` releases and deploys a specific application version. `sync-env` synchronizes the environment definition."
         required: true
       Version:
+        type: string
         description: "The tag of the application docker image to deploy. This is required if the selected deployment type is `deploy`."
       Environment:
         type: string
@@ -25,17 +27,6 @@ on:
       Region:
         type: string
         description: "The AWS region to target. Can be either: 'us-west-1', or 'ca-central-1', or 'all'."
-        required: true
-
-    secrets:
-      DEPLOYMENT_AWS_ROLE_ARN:
-        description: "The ARN of an AWS IAM role to be used when performing update operations"
-        required: true
-      DEPLOYMENT_REPOSITORY:
-        description: "The GitHub repository that contains environment definitions"
-        required: true
-      DEPLOYMENT_REPOSITORY_KEY:
-        description: "The deployment key for the GitHub repository defined in DEPLOYMENT_REPOSITORY"
         required: true
 
 permissions:
@@ -49,7 +40,7 @@ env:
   APP_DOCKER_VERSION: ${{ github.event.inputs.Version }}
 
 jobs:
-  eb-update:
+  elasticbeanstalk:
     runs-on: ubuntu-latest
     steps:
     - name: Configure aws credentials
