@@ -1,4 +1,4 @@
-name: Automated Release
+name: Release
 
 concurrency:
   group: dummy-h-periodic-release
@@ -27,8 +27,6 @@ jobs:
     name: create docker image
     needs: continuous-integration
     runs-on: ubuntu-latest
-    env:
-      name: dummy-h-periodic
     steps:
     - uses: actions/checkout@v2
     - name: build
