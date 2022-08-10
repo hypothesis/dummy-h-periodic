@@ -1,7 +1,7 @@
 name: Release
 
 concurrency:
-  group: dummy-h-periodic-release
+  group: ${{ github.event.repository.name }}-release
   cancel-in-progress: true
 
 on:
@@ -14,7 +14,7 @@ permissions:
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-  APP: 'dummy-h-periodic'
+  APP: ${{ github.event.repository.name }}
   TYPE: 'deploy'
   APP_DOCKER_VERSION: "latest"
 
@@ -27,6 +27,8 @@ jobs:
     name: create docker image
     needs: continuous-integration
     runs-on: ubuntu-latest
+    env:
+      name: ${{ github.event.repository.name }}
     steps:
     - uses: actions/checkout@v2
     - name: build
