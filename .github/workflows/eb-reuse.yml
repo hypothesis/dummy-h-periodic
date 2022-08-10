@@ -1,4 +1,4 @@
-name: Elastic Beanstalk
+name: Elastic Beanstalk Reuse
 
 # Manages AWS Elastic Beanstalk operations.
 #
