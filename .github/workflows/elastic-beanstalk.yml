@@ -1,16 +1,15 @@
-name: EB ALL
-
 # Manages AWS Elastic Beanstalk operations.
 #
 # For more information on deployments:
 # - https://github.com/hypothesis/deployment
+name: Elastic Beanstalk
 
 on:
   workflow_dispatch:
     inputs: 
       Application:
         type: choice
-        description: "The application to be updated"
+        description: "The application to target"
         required: true
         options:
           - analytics-dashboard
@@ -27,7 +26,7 @@ on:
           - viahtml
       Operation:
         type: choice
-        description: "Choose the deployment operation. `redeploy` triggers a redeployment of the currently-deployed version. `deploy` releases and deploys a specific application version. `sync-env` synchronizes the environment definition."
+        description: "Choose the deployment operation. `redeploy` triggers a redeployment of the currently deployed version. `deploy` releases and deploys a specific application version. `sync-env` synchronizes the environment definition."
         required: true
         default: 'redeploy'
         options:
@@ -38,7 +37,7 @@ on:
         description: "The tag of the application docker image to deploy. This is required if the selected deployment type is `deploy`."
       Environment:
         type: choice
-        description: "The environment to deploy. Can be either: 'qa' or 'prod'."
+        description: "The environment to target. Can be either: 'qa' or 'prod'."
         required: true
         default: 'qa'
         options:
