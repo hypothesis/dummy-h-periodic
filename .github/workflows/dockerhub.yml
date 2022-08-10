@@ -1,5 +1,6 @@
 # Builds and pushes a callers docker container to docker hub
 name: dockerhub.yml
+
 on:
   workflow_call:
     inputs:
@@ -15,13 +16,12 @@ on:
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-  APP: dummy-h-periodic
 
 jobs:
   dockerhub:
     runs-on: ubuntu-latest
     env:
-      name: ${{ github.event.inputs.Application }}
+      name: ${{ inputs.Application }}
     steps:
       - uses: actions/checkout@v3
       - name: build
