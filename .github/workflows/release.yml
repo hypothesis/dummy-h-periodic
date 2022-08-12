@@ -9,6 +9,11 @@ on:
     branches:
       - main
 
+env:
+  APPLICATION: ${{ github.event.repository.name }}
+  OPERATION: deploy
+  VERSION: latest
+
 jobs:
   continuous-integration:
     uses: ./.github/workflows/continuous-integration.yml
@@ -18,7 +23,7 @@ jobs:
     needs: continuous-integration
     uses: hypothesis/workflows/.github/workflows/dockerhub.yml@main
     with:
-      Application: ${{ github.event.repository.name }}
+      Application: $APPLICATION
     secrets: inherit
 
   qa-us-west-1:
@@ -26,11 +31,11 @@ jobs:
     name: ${{ github.event.repository.name }}
     uses: hypothesis/workflows/.github/workflows/eb-update.yml@main
     with:
-      Application: ${{ github.event.repository.name }}
+      Application: $APPLICATION
+      Operation: $OPERATION
+      Version: $VERSION
       Environment: qa
       Region: us-west-1
-      Operation: deploy
-      Version: latest
     secrets: inherit
 
   prod-us-west-1:
@@ -38,11 +43,11 @@ jobs:
     name: ${{ github.event.repository.name }}
     uses: hypothesis/workflows/.github/workflows/eb-update.yml@main
     with:
-      Application: ${{ github.event.repository.name }}
+      Application: $APPLICATION
+      Operation: $OPERATION
+      Version: $VERSION
       Environment: prod
       Region: us-west-1
-      Operation: deploy
-      Version: latest
     secrets: inherit
 
   prod-ca-central-1:
@@ -50,9 +55,9 @@ jobs:
     name: ${{ github.event.repository.name }}
     uses: hypothesis/workflows/.github/workflows/eb-update.yml@main
     with:
-      Application: ${{ github.event.repository.name }}
+      Application: $APPLICATION
+      Operation: $OPERATION
+      Version: $VERSION
       Environment: prod
       Region: ca-central-1
-      Operation: deploy
-      Version: latest
     secrets: inherit
