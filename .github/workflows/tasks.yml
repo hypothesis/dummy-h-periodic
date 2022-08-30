@@ -50,8 +50,7 @@ jobs:
     with:
       App: 'h'
       #App: ${{ github.event.repository.name }}
-      Env: 'qa'
-      #Env: ${{ inputs.Environment }}
+      Env: ${{ inputs.Environment }}
       Timeout: ${{ inputs.Timeout }}
       Region: ${{ inputs.Region }}
       Command: 'hypothesis migrate current'
