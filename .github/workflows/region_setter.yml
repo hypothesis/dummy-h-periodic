@@ -1,0 +1,41 @@
+name: region_setter
+
+on:
+  workflow_dispatch:
+    inputs:
+      Region:
+        type: choice
+        description: "The AWS region to target"
+        required: true
+        default: 'all'
+        options:
+          - 'all'
+          - 'us-west-1'
+          - 'ca-central-1'
+
+jobs:
+
+  build-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - id: set-matrix
+        run: |
+          if [[ "${{ inputs.Region }}" == 'all' ]] ; then
+            echo '::set-output name=version_matrix::["us-west-1", "ca-central-1"]'
+          elif [[ "${{ inputs.Region }}" == 'ca-central-1' ]] ; then
+            echo '::set-output name=version_matrix::["ca-central-1"]'  
+          else
+            echo '::set-output name=version_matrix::["us-west-1"]'  
+          fi
+    outputs:
+      version_matrix: ${{ steps.set-matrix.outputs.version_matrix }}
+
+  process:
+    needs: build-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: ${{ fromJson(needs.build-matrix.outputs.version_matrix) }}
+    steps:
+    - name: execute
+      run: echo "${{ matrix.version }}"
