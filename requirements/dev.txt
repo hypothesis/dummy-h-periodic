@@ -6,21 +6,21 @@
 #
 amqp==5.0.6
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   kombu
 backcall==0.2.0
     # via ipython
 billiard==3.6.4.0
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   celery
 build==0.8.0
     # via pip-tools
 celery==5.1.2
-    # via -r requirements/requirements.txt
+    # via -r requirements.txt
 click==7.1.2
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   celery
     #   click-didyoumean
     #   click-plugins
@@ -28,27 +28,27 @@ click==7.1.2
     #   pip-tools
 click-didyoumean==0.0.3
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   celery
 click-plugins==1.1.1
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   celery
 click-repl==0.2.0
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   celery
 decorator==5.0.7
     # via ipython
-ipython==7.27.0
-    # via -r requirements/dev.in
+ipython==7.31.1
+    # via -r dev.in
 ipython-genutils==0.2.0
     # via traitlets
 jedi==0.18.0
     # via ipython
 kombu==5.1.0
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   celery
 matplotlib-inline==0.1.2
     # via ipython
@@ -63,14 +63,14 @@ pexpect==4.8.0
 pickleshare==0.7.5
     # via ipython
 pip-sync-faster==0.0.2
-    # via -r requirements/dev.in
+    # via -r dev.in
 pip-tools==6.8.0
     # via
-    #   -r requirements/dev.in
+    #   -r dev.in
     #   pip-sync-faster
 prompt-toolkit==3.0.18
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   click-repl
     #   ipython
 ptyprocess==0.7.0
@@ -81,14 +81,14 @@ pyparsing==3.0.9
     # via packaging
 pytz==2021.1
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   celery
 six==1.16.0
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   click-repl
 supervisor==4.2.2
-    # via -r requirements/requirements.txt
+    # via -r requirements.txt
 tomli==2.0.1
     # via
     #   build
@@ -99,13 +99,13 @@ traitlets==5.0.5
     #   matplotlib-inline
 vine==5.0.0
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   amqp
     #   celery
     #   kombu
 wcwidth==0.2.5
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   prompt-toolkit
 wheel==0.37.1
     # via pip-tools
