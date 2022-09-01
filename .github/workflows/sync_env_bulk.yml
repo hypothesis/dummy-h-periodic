@@ -1,0 +1,18 @@
+# Sync Elastic Beanstalk environment definitions with running
+# applications on bulk.
+name: Bulk-Sync-Env
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  sync-env:
+    app_matrix:
+      strategy:
+        matrix:
+          app: [ analytics-dashboard bouncer checkmate h h-periodic lms metabase via viahtml ]
+      runs-on: ubuntu-latest
+      steps:
+      - name: execute
+        run: echo "${{ matrix.app }}"
