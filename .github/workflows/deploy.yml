@@ -31,14 +31,14 @@ jobs:
       Environment: qa
       Region: us-west-1
       Operation: deploy
-      Version: latest
+      Version: ${{ needs.create-image.outputs.docker_tag }}
     secrets: inherit
 
   prod-us-west-1:
     concurrency:
       group: ${{ github.event.repository.name }}-deploy-us
       cancel-in-progress: true
-    needs: qa-us-west-1
+    needs: [create-image, qa-us-west-1]
     name: ${{ github.event.repository.name }}
     uses: hypothesis/workflows/.github/workflows/eb-update.yml@main
     with:
@@ -46,14 +46,14 @@ jobs:
       Environment: prod
       Region: us-west-1
       Operation: deploy
-      Version: latest
+      Version: ${{ needs.create-image.outputs.docker_tag }}
     secrets: inherit
 
   prod-ca-central-1:
     concurrency:
       group: ${{ github.event.repository.name }}-deploy-ca
       cancel-in-progress: true
-    needs: qa-us-west-1
+    needs: [create-image, qa-us-west-1]
     name: ${{ github.event.repository.name }}
     uses: hypothesis/workflows/.github/workflows/eb-update.yml@main
     with:
@@ -61,5 +61,5 @@ jobs:
       Environment: prod
       Region: ca-central-1
       Operation: deploy
-      Version: latest
+      Version: ${{ needs.create-image.outputs.docker_tag }}
     secrets: inherit
