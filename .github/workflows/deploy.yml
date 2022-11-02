@@ -11,55 +11,57 @@ jobs:
     uses: ./.github/workflows/continuous-integration.yml
     name: continuous integration
 
-  create-image:
+  Docker_Hub:
+    name: Docker Hub
     concurrency:
-      group: ${{ github.event.repository.name }}-deploy-create-image
+      group: ${{ github.event.repository.name }}-deploy-Docker_Hub
     needs: continuous-integration
     uses: hypothesis/workflows/.github/workflows/dockerhub.yml@main
     with:
       Application: ${{ github.event.repository.name }}
     secrets: inherit
 
-  qa-us-west-1:
+  QA:
     concurrency:
       group: ${{ github.event.repository.name }}-deploy-qa
-    needs: create-image
-    name: ${{ github.event.repository.name }}
-    uses: hypothesis/workflows/.github/workflows/eb-update.yml@main
+    needs: Docker_Hub
+    uses: hypothesis/workflows/.github/workflows/deploy.yml@main
     with:
-      Application: ${{ github.event.repository.name }}
-      Environment: qa
-      Region: us-west-1
-      Operation: deploy
-      Version: ${{ needs.create-image.outputs.docker_tag }}
+      operation: deploy
+      github_environment_name: QA
+      aws_region: us-west-1
+      elasticbeanstalk_application: dummy-h-periodic
+      elasticbeanstalk_environment: qa
+      docker_tag: ${{ needs.Docker_Hub.outputs.docker_tag }}
     secrets: inherit
 
-  prod-us-west-1:
+  Production:
     concurrency:
       group: ${{ github.event.repository.name }}-deploy-us
       cancel-in-progress: true
-    needs: [create-image, qa-us-west-1]
-    name: ${{ github.event.repository.name }}
-    uses: hypothesis/workflows/.github/workflows/eb-update.yml@main
+    needs: [Docker_Hub, QA]
+    uses: hypothesis/workflows/.github/workflows/deploy.yml@main
     with:
-      Application: ${{ github.event.repository.name }}
-      Environment: prod
-      Region: us-west-1
-      Operation: deploy
-      Version: ${{ needs.create-image.outputs.docker_tag }}
+      operation: deploy
+      github_environment_name: Production
+      aws_region: us-west-1
+      elasticbeanstalk_application: dummy-h-periodic
+      elasticbeanstalk_environment: prod
+      docker_tag: ${{ needs.Docker_Hub.outputs.docker_tag }}
     secrets: inherit
 
-  prod-ca-central-1:
+  Production_Canada:
     concurrency:
       group: ${{ github.event.repository.name }}-deploy-ca
       cancel-in-progress: true
-    needs: [create-image, qa-us-west-1]
-    name: ${{ github.event.repository.name }}
-    uses: hypothesis/workflows/.github/workflows/eb-update.yml@main
+    needs: [Docker_Hub, QA]
+    name: Production (Canada)
+    uses: hypothesis/workflows/.github/workflows/deploy.yml@main
     with:
-      Application: ${{ github.event.repository.name }}
-      Environment: prod
-      Region: ca-central-1
-      Operation: deploy
-      Version: ${{ needs.create-image.outputs.docker_tag }}
+      operation: deploy
+      github_environment_name: Production (Canada)
+      aws_region: ca-central-1
+      elasticbeanstalk_application: dummy-h-periodic
+      elasticbeanstalk_environment: prod
+      docker_tag: ${{ needs.Docker_Hub.outputs.docker_tag }}
     secrets: inherit
